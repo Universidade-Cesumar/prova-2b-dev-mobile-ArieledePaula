@@ -13,12 +13,31 @@ export default function App() {
 
   const  API_URL =  'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
   // Função para preencher os campos
-  const adicionarOuAtualizarMaterial = () => {
+  const adicionarOuAtualizarMaterial = async () => {
     if(!nome || !quantidade) {
       alert('Por favor, preencha ambos os campos!');
       return;
     }
+
+    try {
+      const novoMaterial = {
+        nome,
+        quantidade: Number(quantidade),
+      };
+
+      await fetch(API_URL, { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(novoMaterial),
+    });
+
+    setNome('');
+    setQuantidade('');
+    carregarMateriais();
   }
+  catch (error) {
+    console.error('Erro ao adicionar material:', error);
+  }};
 
   // Função para validar se a quantidade é número
   if (isNaN(quantidade)) {
