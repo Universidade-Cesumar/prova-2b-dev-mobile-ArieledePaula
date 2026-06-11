@@ -5,10 +5,41 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Activity
 export default function App() {
   // --- Estados da Aplicação (Os alunos implementarão aqui) ---
   const [materials, setMaterials] = useState([]);
+  const [nome, setNome] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [editandoID, setEditandoID] = useState(null);
 
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
+
+  // Função para preencher os campos
+  const adicionarOuAtualizarMaterial = () => {
+    if(!nome || !quantidade) {
+      alert('Por favor, preencha ambos os campos!');
+      return;
+    }
+  }
+
+  // Função para validar se a quantidade é número
+  if (isNaN(quantidade)) {
+    alert('A quantidade deve ser um número!');
+    return;
+  }
+
+  // Função para adicionar ou atualizar material
+  if(editandoID) {
+  const materialAtualizado = materials.map(item => 
+    item.id === editandoID ? { ...item, nome, quantidade: parseInt(quantidade) } : item);
+  
+  setMaterials(materialAtualizado);
+  setEditandoID(null);
+  } else {
+  const novoMaterial = {
+    id: Date.now().toString(),
+    nome,
+    quantidade: parseInt(quantidade),
+  };
+  setMaterials([...materials, novoMaterial]);
+  }
 
   return (
     <View style={styles.container}>
