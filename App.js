@@ -130,8 +130,17 @@ const importarMateriais = async () => {
           style={styles.input}
         />
         
+      <TouchableOpacity
+       testID="btn-cadastrar" 
+       onPress={adicionarOuAtualizarMaterial} 
+       style={styles.button}
+      >
+      <Text> style = {styles.buttonText}
+        Cadastrar
+      </Text>
+      </TouchableOpacity>
 
-
+      
       
       
     </View>
