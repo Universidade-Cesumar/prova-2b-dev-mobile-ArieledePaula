@@ -12,10 +12,11 @@ export default function App() {
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
 
   const  API_URL =  'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
-  // Função para preencher os campos
+
+  // Função para adiconar ou atualizar material
   const adicionarOuAtualizarMaterial = async () => {
     if(!nome || !quantidade) {
-      alert('Por favor, preencha ambos os campos!');
+      alert('Por favor, preencha ambos os campos!');  // Função para preencher os campos
       return;
     }
 
@@ -45,7 +46,7 @@ export default function App() {
     return;
   }
 
-  // Função para adicionar ou atualizar material
+  // Função para atualizar material existente
   if(editandoID) {
   const materialAtualizado = materials.map(item => 
     item.id === editandoID ? { ...item, nome, quantidade: parseInt(quantidade) } : item);
@@ -112,7 +113,26 @@ const importarMateriais = async () => {
         Através desta interface conectada à API, é possível realizar o inventário em tempo real, cadastrar novos materiais e registrar baixas de estoque de forma ágil e segura.
       </Text>
 
-      {/* Os alunos vão construir os componentes visuais das Sprints aqui dentro */}
+          
+        <TextInput
+          testID="input-nome"
+          placeholder="Nome do Material"
+          value={nome}
+          onChangeText={setNome}
+          style={styles.input} />
+
+        <TextInput
+          testID="input-quantidade"
+          placeholder="Quantidade"
+          value={quantidade}
+          onChangeText={setQuantidade}
+          keyboardType="numeric"
+          style={styles.input}
+        />
+        
+
+
+      
       
     </View>
   );
@@ -138,5 +158,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20, // Dá um espaçamento confortável entre as linhas do parágrafo
     marginBottom: 30, // Margem inferior para afastar o texto dos futuros inputs dos alunos
-  }
+  },
+
+  input: {
+  backgroundColor: '#fff',
+  padding: 12,
+  borderRadius: 8,
+  marginBottom: 10,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  },
+
+   
 });
