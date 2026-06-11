@@ -11,6 +11,7 @@ export default function App() {
 
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
 
+  const  API_URL =  'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
   // Função para preencher os campos
   const adicionarOuAtualizarMaterial = () => {
     if(!nome || !quantidade) {
@@ -66,6 +67,22 @@ const editarMaterial = (item) => {
   setEditandoID(item.id);
 }
 
+ // subindo para a API
+const importarMateriais = async () => {
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    setMaterials(data);
+  } catch (error) {
+    console.error('Erro ao importar materiais:', error);
+  }
+
+  useEffect(() => {
+  carregarMateriais();
+  }, []);
+
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Almoxarifado - Enfermagem</Text>
@@ -80,7 +97,7 @@ const editarMaterial = (item) => {
       
     </View>
   );
-}
+
 
 const styles = StyleSheet.create({
   container: {
