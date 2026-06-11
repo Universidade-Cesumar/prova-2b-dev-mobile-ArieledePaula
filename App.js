@@ -41,6 +41,31 @@ export default function App() {
   setMaterials([...materials, novoMaterial]);
   }
 
+  //limpa formiulário
+  setNome('');
+  setQuantidade('');
+};
+
+
+// Função de remover material
+const removerMaterial = (id) => {
+  setMaterials(materials.filter(item => item.id !== id));
+
+// Se estiver sendo editado cancela a edição
+  if(editandoID === id) {
+    setEditandoID(null);
+    setNome('');
+    setQuantidade('');
+  }
+};
+
+// preenche os campos para edição
+const editarMaterial = (item) => {
+  setNome(item.nome);
+  setQuantidade(item.quantidade.toString());
+  setEditandoID(item.id);
+}
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Almoxarifado - Enfermagem</Text>
