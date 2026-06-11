@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 
+
 export default function App() {
   // --- Estados da Aplicação (Os alunos implementarão aqui) ---
+  const [materials, setMaterials] = useState([]);
+  const [quantidade, setQuantidade] = useState('');
+  const [editandoID, setEditandoID] = useState(null);
 
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
 
