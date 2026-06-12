@@ -7,14 +7,13 @@ export default function App() {
   const [materials, setMaterials] = useState([]);
   const [nome, setNome] = useState('');
   const [quantidade, setQuantidade] = useState('');
-  const [editandoID, setEditandoID] = useState(null);
 
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
-  useEffect(() => {
-  carregarMateriais();
-  }, []);
+const API_URL = 'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
 
-  const  API_URL =  'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
+useEffect(() => {
+  carregarMateriais();
+}, []);
 
   // Função para adiconar ou atualizar material
   const adicionarOuAtualizarMaterial = async () => {
@@ -22,6 +21,11 @@ export default function App() {
       alert('Por favor, preencha ambos os campos!');  // Função para preencher os campos
       return;
     }
+
+    if (isNaN(quantidade)) {
+    alert('A quantidade deve ser um número!');
+     return;
+}
 
     try {
       const novoMaterial = {
@@ -41,7 +45,7 @@ export default function App() {
   }
   catch (error) {
     console.error('Erro ao adicionar material:', error);
-  }};
+  }
 
 };
 
@@ -110,6 +114,8 @@ const carregarMateriais = async () => {
       />
     </View>
   );
+
+}
 
 const styles = StyleSheet.create({
   container: {
