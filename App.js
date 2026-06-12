@@ -56,10 +56,20 @@ const carregarMateriais = async () => {
     const response = await fetch(API_URL);
     const data = await response.json();
     setMaterials(data);
-  } catch (error) {
+    } catch (error) {
     console.error('Erro ao importar materiais:', error);
-  }
-
+    }
+  
+    const [loading, setLoading] = useState(true);
+     try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setMaterials(data);
+      } catch (error) {
+      console.error(error);
+      } finally {
+      setLoading(false);
+      }
   
   };
 
@@ -101,6 +111,9 @@ const carregarMateriais = async () => {
       
       </TouchableOpacity>
 
+      {loading ? (
+        <ActivityIndicator size="large" color="#007BFF" />
+      ) : (
       <FlatList
         testID="lista-materiais"
         data={materials}
@@ -111,7 +124,7 @@ const carregarMateriais = async () => {
                  <Text> Quantidade: {item.quantidade} </Text>                
            </View>
         )}
-      />
+      />)}
     </View>
   );
 
