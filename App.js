@@ -7,13 +7,15 @@ export default function App() {
   const [materials, setMaterials] = useState([]);
   const [nome, setNome] = useState('');
   const [quantidade, setQuantidade] = useState('');
-
+  const [loading, setLoading] = useState(false);
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
-const API_URL = 'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
+ const  API_URL =  'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
 
-useEffect(() => {
+  useEffect(() => {
   carregarMateriais();
-}, []);
+  }, []);
+
+
 
   // Função para adiconar ou atualizar material
   const adicionarOuAtualizarMaterial = async () => {
@@ -52,24 +54,18 @@ useEffect(() => {
 
  // subindo para a API
 const carregarMateriais = async () => {
-  try {
-    const response = await fetch(API_URL);
-    const data = await response.json();
-    setMaterials(data);
-    } catch (error) {
-    console.error('Erro ao importar materiais:', error);
-    }
-  
-    const [loading, setLoading] = useState(true);
-     try {
-      const response = await fetch(API_URL);
-      const data = await response.json();
-      setMaterials(data);
-      } catch (error) {
-      console.error(error);
-      } finally {
-      setLoading(false);
-      }
+setLoading(true);
+
+try {
+  const response = await fetch(API_URL);
+  const data = await response.json();
+  setMaterials(data);
+} catch (error) {
+  console.error(error);
+} finally {
+  setLoading(false);
+}
+
   
   };
 
@@ -111,8 +107,9 @@ const carregarMateriais = async () => {
       
       </TouchableOpacity>
 
+
       {loading ? (
-        <ActivityIndicator size="large" color="#007BFF" />
+        <ActivityIndicator size="large" color="#ffffff" />
       ) : (
       <FlatList
         testID="lista-materiais"
