@@ -78,7 +78,6 @@ try {
         Este template servirá para desenvolver o projeto responsável por modernizar o controle de insumos médicos do almoxarifado. 
         Através desta interface conectada à API, é possível realizar o inventário em tempo real, cadastrar novos materiais e registrar baixas de estoque de forma ágil e segura.
       </Text>
-
           
         <TextInput
           testID="input-nome"
@@ -107,6 +106,10 @@ try {
       
       </TouchableOpacity>
 
+        <Text style={styles.subtitle}>
+        Estoque de Materiais
+        </Text>
+
 
       {loading ? (
         <ActivityIndicator size="large" color="#ffffff" />
@@ -117,9 +120,9 @@ try {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.card}>
-              <Text> {item.nome} </Text>
-                 <Text> Quantidade: {item.quantidade} </Text>                
-           </View>
+          <Text style={styles.nomeMaterial}>{item.nome}</Text>
+          <Text>Quantidade: {item.quantidade}</Text>
+          </View>
         )}
       />)}
     </View>
@@ -179,6 +182,18 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 10,
     borderRadius: 8,
+  },
+
+  subtitle: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  marginBottom: 10,
+  },
+
+  nomeMaterial: {
+  fontSize: 16,
+  fontWeight: 'bold',
+  marginBottom: 5,
   }
    
 }); 
