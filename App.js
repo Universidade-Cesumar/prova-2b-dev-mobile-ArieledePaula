@@ -40,31 +40,6 @@ export default function App() {
     console.error('Erro ao adicionar material:', error);
   }};
 
-  // Função para validar se a quantidade é número
-  if (isNaN(quantidade)) {
-    alert('A quantidade deve ser um número!');
-    return;
-  }
-
-  // Função para atualizar material existente
-  if(editandoID) {
-  const materialAtualizado = materials.map(item => 
-    item.id === editandoID ? { ...item, nome, quantidade: parseInt(quantidade) } : item);
-  
-  setMaterials(materialAtualizado);
-  setEditandoID(null);
-  } else {
-  const novoMaterial = {
-    id: Date.now().toString(),
-    nome,
-    quantidade: parseInt(quantidade),
-  };
-  setMaterials([...materials, novoMaterial]);
-  }
-
-  //limpa formiulário
-  setNome('');
-  setQuantidade('');
 };
 
 
@@ -88,7 +63,7 @@ const editarMaterial = (item) => {
 }
 
  // subindo para a API
-const importarMateriais = async () => {
+const carregarMateriais = async () => {
   try {
     const response = await fetch(API_URL);
     const data = await response.json();
