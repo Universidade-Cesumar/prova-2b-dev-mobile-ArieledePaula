@@ -140,12 +140,19 @@ const importarMateriais = async () => {
       </Text>
       </TouchableOpacity>
 
-      
-      
-      
+      <FlatList
+        testID="lista-materials"
+        data={materials}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+              <Text> {item.nome} </Text>
+                 <Text> Quantidade: {item.quantidade} </Text>                
+           </View>
+        )}
+      />
     </View>
   );
-
 
 const styles = StyleSheet.create({
   container: {
