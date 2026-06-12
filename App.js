@@ -46,25 +46,6 @@ export default function App() {
 };
 
 
-// Função de remover material
-const removerMaterial = (id) => {
-  setMaterials(materials.filter(item => item.id !== id));
-
-// Se estiver sendo editado cancela a edição
-  if(editandoID === id) {
-    setEditandoID(null);
-    setNome('');
-    setQuantidade('');
-  }
-};
-
-// preenche os campos para edição
-const editarMaterial = (item) => {
-  setNome(item.nome);
-  setQuantidade(item.quantidade.toString());
-  setEditandoID(item.id);
-}
-
  // subindo para a API
 const carregarMateriais = async () => {
   try {
