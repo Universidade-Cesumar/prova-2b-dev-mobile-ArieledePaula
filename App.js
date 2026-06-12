@@ -10,6 +10,9 @@ export default function App() {
   const [editandoID, setEditandoID] = useState(null);
 
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
+  useEffect(() => {
+  carregarMateriais();
+  }, []);
 
   const  API_URL =  'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
 
@@ -72,10 +75,7 @@ const carregarMateriais = async () => {
     console.error('Erro ao importar materiais:', error);
   }
 
-  useEffect(() => {
-  carregarMateriais();
-  }, []);
-
+  
   };
 
   return (
@@ -110,13 +110,14 @@ const carregarMateriais = async () => {
        onPress={adicionarOuAtualizarMaterial} 
        style={styles.button}
       >
-      <Text> style = {styles.buttonText}
-        Cadastrar
+      <Text style={styles.buttonText}>
+       Cadastrar
       </Text>
+      
       </TouchableOpacity>
 
       <FlatList
-        testID="lista-materials"
+        testID="lista-materiais"
         data={materials}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
