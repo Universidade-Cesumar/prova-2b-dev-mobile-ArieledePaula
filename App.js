@@ -137,7 +137,24 @@ const excluirMaterial = async (id) => {
           <Text>Quantidade: {item.quantidade}</Text>
           </View>
         )}
-      />)}
+      />
+      )}
+
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+          <Text style={styles.nomeMaterial}>{item.nome}</Text>
+          <Text>Quantidade: {item.quantidade}</Text>
+
+        <TouchableOpacity
+          testID="btn-excluir"
+          onPress={() => excluirMaterial(item.id)}
+          style={styles.btnExcluir}
+       >
+        <Text style={styles.actionText}>Excluir</Text>
+        </TouchableOpacity>
+        </View>
+        )}
+
     </View>
   );
 
@@ -208,7 +225,17 @@ const styles = StyleSheet.create({
   fontSize: 16,
   fontWeight: 'bold',
   marginBottom: 5,
-  }
-  
+  },
+
+  btnExcluir: {
+  marginTop: 10,
+  padding: 8,
+  },
+
+  actionText: {
+  color: 'red',
+  fontWeight: 'bold',
+  },
+
 }); 
 
