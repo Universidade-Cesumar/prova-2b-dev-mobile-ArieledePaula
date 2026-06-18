@@ -54,6 +54,30 @@ export default function App() {
 };
 
 
+
+const baixarMaterial = async (item) => {
+  const quantidadeRetirada = Number(retiradas[item.id] || 0);
+
+  if (!validarRetirada(item.quantidade, quantidadeRetirada)) {
+    alert('Quantidade inválida para retirada!');
+    return;
+  }
+
+  try {
+    await fetch(`${API_URL}/${item.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...item,
+        quantidade: item.quantidade - quantidadeRetirada,
+      }),
+    });
+  } catch (error) {
+    console.error('Erro ao baixar material:', error);
+  }
+
  // subindo para a API
 const carregarMateriais = async () => {
 setLoading(true);
@@ -241,3 +265,4 @@ const styles = StyleSheet.create({
 
 }); 
 
+}
