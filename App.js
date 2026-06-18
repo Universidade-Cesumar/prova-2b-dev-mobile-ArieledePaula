@@ -65,13 +65,22 @@ try {
 } finally {
   setLoading(false);
 }
+};
 
-const excluirMaterial = (id) => {
-  setMaterials(materials.filter(material => material.id !== id));
+ // excluir material
+const excluirMaterial = async (id) => {
+  console.log("Excluindo:", id);
 
+  try {
+    await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+    });
 
-  
-  };
+    carregarMateriais();
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -132,8 +141,6 @@ const excluirMaterial = (id) => {
     </View>
   );
 
-
-  
 
 }
 
@@ -202,6 +209,6 @@ const styles = StyleSheet.create({
   fontWeight: 'bold',
   marginBottom: 5,
   }
-   
+  
 }); 
-}
+
