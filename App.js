@@ -66,6 +66,10 @@ try {
   setLoading(false);
 }
 
+const excluirMaterial = (id) => {
+  setMaterials(materials.filter(material => material.id !== id));
+
+
   
   };
 
@@ -127,6 +131,9 @@ try {
       />)}
     </View>
   );
+
+
+  
 
 }
 
@@ -197,3 +204,4 @@ const styles = StyleSheet.create({
   }
    
 }); 
+}
