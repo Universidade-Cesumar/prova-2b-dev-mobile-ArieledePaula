@@ -161,7 +161,28 @@ const excluirMaterial = async (id) => {
           <View style={styles.card}>
           <Text style={styles.nomeMaterial}>{item.nome}</Text>
           <Text>Quantidade: {item.quantidade}</Text>
-          </View>
+
+          <TextInput
+           testID="input-retirada"
+           placeholder="Qtd retirada"
+           keyboardType="numeric"
+           value={retiradas[item.id] || ''}
+           onChangeText={(text) =>
+           setRetiradas({...retiradas,
+           [item.id]: text,
+         })
+         }
+          style={styles.input}
+          />
+
+         <TouchableOpacity
+          testID="btn-baixar"
+          onPress={() => baixarMaterial(item)}
+          style={styles.button}
+          >
+         <Text style={styles.buttonText}>Baixar</Text>
+         </TouchableOpacity>
+         </View>
         )}
       />
       )}
