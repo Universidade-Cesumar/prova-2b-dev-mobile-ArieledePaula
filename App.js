@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 
 
+export const validarRetirada = (estoqueAtual, quantidadeRetirada) => {
+  return (
+    quantidadeRetirada > 0 &&
+    quantidadeRetirada <= estoqueAtual
+  );
+};
+
 export default function App() {
   // --- Estados da Aplicação (Os alunos implementarão aqui) ---
   const [materials, setMaterials] = useState([]);
@@ -16,8 +23,6 @@ export default function App() {
   useEffect(() => {
   carregarMateriais();
   }, []);
-
-
 
   // Função para adiconar ou atualizar material
   const adicionarOuAtualizarMaterial = async () => {
@@ -74,23 +79,16 @@ const baixarMaterial = async (item) => {
         quantidade: item.quantidade - quantidadeRetirada,
       }),
     });
+
+    carregarMateriais();
+
+    setRetiradas({
+      ...retiradas,
+      [item.id]: '',
+    });
   } catch (error) {
-    console.error('Erro ao baixar material:', error);
+    console.error('Erro ao baixar estoque:', error);
   }
-
- // subindo para a API
-const carregarMateriais = async () => {
-setLoading(true);
-
-try {
-  const response = await fetch(API_URL);
-  const data = await response.json();
-  setMaterials(data);
-} catch (error) {
-  console.error(error);
-} finally {
-  setLoading(false);
-}
 };
 
  // excluir material
@@ -282,8 +280,6 @@ const styles = StyleSheet.create({
   actionText: {
   color: 'red',
   fontWeight: 'bold',
-  },
+  }
 
 }); 
-
-}
