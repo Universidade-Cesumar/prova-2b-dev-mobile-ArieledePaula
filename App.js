@@ -58,7 +58,20 @@ export default function App() {
 
 };
 
+const carregarMateriais = async () => {
+  setLoading(true);
 
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+
+    setMaterials(data);
+  } catch (error) {
+    console.error('Erro ao carregar materiais:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
 const baixarMaterial = async (item) => {
   const quantidadeRetirada = Number(retiradas[item.id] || 0);
@@ -170,7 +183,7 @@ const excluirMaterial = async (id) => {
            [item.id]: text,
          })
          }
-          style={styles.input}
+          style={styles.inputRetirada}
           />
 
          <TouchableOpacity
@@ -180,15 +193,6 @@ const excluirMaterial = async (id) => {
           >
          <Text style={styles.buttonText}>Baixar</Text>
          </TouchableOpacity>
-         </View>
-        )}
-      />
-      )}
-
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-          <Text style={styles.nomeMaterial}>{item.nome}</Text>
-          <Text>Quantidade: {item.quantidade}</Text>
 
         <TouchableOpacity
           testID="btn-excluir"
@@ -199,7 +203,8 @@ const excluirMaterial = async (id) => {
         </TouchableOpacity>
         </View>
         )}
-
+      />
+      )}
     </View>
   );
 
