@@ -278,13 +278,26 @@ const styles = StyleSheet.create({
   },
 
   btnExcluir: {
+  backgroundColor: '#dc2626',
+  padding: 10,
+  borderRadius: 8,
+  alignItems: 'center',
   marginTop: 10,
-  padding: 8,
-  },
+ },
 
   actionText: {
-  color: 'red',
+  color: '#fff',
   fontWeight: 'bold',
-  }
+},
+
+  inputRetirada: {
+  backgroundColor: '#fff',
+  borderWidth: 1,
+  borderColor: '#ccc',
+  borderRadius: 8,
+  padding: 10,
+  marginTop: 10,
+  marginBottom: 10,
+ },
 
 }); 
