@@ -258,12 +258,13 @@ const styles = StyleSheet.create({
   },
 
 
-  card: {
-    backgroundColor: '#f9f9f9',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 8,
-  },
+ card: {
+  backgroundColor: '#f9f9f9',
+  padding: 15,
+  marginBottom: 10,
+  borderRadius: 8,
+  position: 'relative',
+},
 
   subtitle: {
   fontSize: 18,
@@ -277,18 +278,21 @@ const styles = StyleSheet.create({
   marginBottom: 5,
   },
 
-  btnExcluir: {
+btnExcluir: {
+  position: 'absolute',
+  top: 10,
+  right: 10,
   backgroundColor: '#dc2626',
-  padding: 10,
-  borderRadius: 8,
-  alignItems: 'center',
-  marginTop: 10,
- },
+  paddingVertical: 6,
+  paddingHorizontal: 12,
+  borderRadius: 6,
+  },
 
   actionText: {
   color: '#fff',
   fontWeight: 'bold',
-},
+  fontSize: 14,
+  },
 
   inputRetirada: {
   backgroundColor: '#fff',
@@ -298,6 +302,6 @@ const styles = StyleSheet.create({
   padding: 10,
   marginTop: 10,
   marginBottom: 10,
- },
+  },
 
 }); 
