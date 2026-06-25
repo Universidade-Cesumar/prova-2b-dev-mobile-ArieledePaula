@@ -118,6 +118,12 @@ const excluirMaterial = async (id) => {
   } catch (error) {
     console.error(error);
   }
+
+  // Lista filtro
+  const materiaisFiltrados = materials.filter((item) =>
+  item.nome.toLowerCase().includes(busca.toLowerCase())
+);
+
 };
 
   return (
