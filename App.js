@@ -16,6 +16,7 @@ export default function App() {
   const [quantidade, setQuantidade] = useState('');
   const [loading, setLoading] = useState(false);
   const [retiradas, setRetiradas] = useState({});
+  const [busca, setBusca] =useState('');
 
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
  const  API_URL =  'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
