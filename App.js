@@ -162,8 +162,19 @@ const excluirMaterial = async (id) => {
       </Text>
       
       </TouchableOpacity>
-
+        <TextInput
+         testID="input-busca"
+          placeholder="Pesquisar material..."
+          value={busca}
+           onChangeText={setBusca}
+           style={styles.input}
+        />
         <Text style={styles.subtitle}>
+        <Text testID="total-itens"
+        style={{ marginBottom: 10 }}
+        >
+        Total de materiais: {materiaisFiltrados.length}
+        </Text>
         Estoque de Materiais
         </Text>
 
@@ -173,10 +184,17 @@ const excluirMaterial = async (id) => {
       ) : (
       <FlatList
         testID="lista-materiais"
-        data={materials}
+        data={materiaisFiltrados}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <View style={[
+                styles.card,
+                item.quantidade < 10 && styles.cardCritico
+                ]}
+                accessibilityLabel={
+                item.quantidade < 10 ? "estoque-critico" : undefined
+                 }
+          >
           <Text style={styles.nomeMaterial}>{item.nome}</Text>
           <Text>Quantidade: {item.quantidade}</Text>
 
