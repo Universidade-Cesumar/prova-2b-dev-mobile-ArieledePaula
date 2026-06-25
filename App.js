@@ -55,6 +55,7 @@ export default function App() {
   }
   catch (error) {
     console.error('Erro ao adicionar material:', error);
+    
   }
 
 };
@@ -63,8 +64,13 @@ const carregarMateriais = async () => {
   setLoading(true);
 
   try {
-    const response = await fetch(API_URL);
-    const data = await response.json();
+       const response = await fetch(API_URL);
+  if (!response.ok) {
+    throw new Error("Erro ao carregar materiais");
+     }
+  const data = await response.json();
+
+    
 
     setMaterials(data);
   } catch (error) {
@@ -117,6 +123,7 @@ const excluirMaterial = async (id) => {
     carregarMateriais();
   } catch (error) {
     console.error(error);
+    alert('Erro ao conectar com o servidor.');
   }
 
   // Lista filtro
