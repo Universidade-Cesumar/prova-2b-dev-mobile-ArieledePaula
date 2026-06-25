@@ -328,5 +328,10 @@ btnExcluir: {
   marginTop: 10,
   marginBottom: 10,
   },
+  cardCritico: {
+  backgroundColor: '#ffe5e5',
+  borderWidth: 2,
+  borderColor: '#ff0000',
+ },
 
 }); 
