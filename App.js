@@ -1,41 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
-
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 
 export const validarRetirada = (estoqueAtual, quantidadeRetirada) => {
-  return (
-    quantidadeRetirada > 0 &&
-    quantidadeRetirada <= estoqueAtual
-  );
+  return quantidadeRetirada > 0 && quantidadeRetirada <= estoqueAtual;
 };
 
 export default function App() {
   // --- Estados da Aplicação (Os alunos implementarão aqui) ---
   const [materials, setMaterials] = useState([]);
-  const [nome, setNome] = useState('');
-  const [quantidade, setQuantidade] = useState('');
+  const [nome, setNome] = useState("");
+  const [quantidade, setQuantidade] = useState("");
   const [loading, setLoading] = useState(false);
   const [retiradas, setRetiradas] = useState({});
-  const [busca, setBusca] =useState('');
+  const [busca, setBusca] = useState("");
 
   // --- Funções de Requisição e Efeitos (Os alunos implementarão aqui) ---
- const  API_URL =  'https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais';
+  const API_URL =
+    "https://6a2b400db687a7d5cbc50545.mockapi.io/apiProva/materiais";
 
   useEffect(() => {
-  carregarMateriais();
+    carregarMateriais();
   }, []);
 
   // Função para adiconar ou atualizar material
   const adicionarOuAtualizarMaterial = async () => {
-    if(!nome || !quantidade) {
-      alert('Por favor, preencha ambos os campos!');  // Função para preencher os campos
+    if (!nome || !quantidade) {
+      alert("Por favor, preencha ambos os campos!"); // Função para preencher os campos
       return;
     }
 
     if (isNaN(quantidade)) {
-    alert('A quantidade deve ser um número!');
-     return;
-}
+      alert("A quantidade deve ser um número!");
+      return;
+    }
 
     try {
       const novoMaterial = {
@@ -43,302 +48,288 @@ export default function App() {
         quantidade: Number(quantidade),
       };
 
-      await fetch(API_URL, { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(novoMaterial),
-    });
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novoMaterial),
+      });
 
-    setNome('');
-    setQuantidade('');
-    carregarMateriais();
-  }
-  catch (error) {
-    console.error('Erro ao adicionar material:', error);
-    
-  }
+      setNome("");
+      setQuantidade("");
+      carregarMateriais();
+    } catch (error) {
+      console.error("Erro ao adicionar material:", error);
+    }
+  };
 
-};
+  const carregarMateriais = async () => {
+    setLoading(true);
 
-const carregarMateriais = async () => {
-  setLoading(true);
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error("Erro ao carregar materiais");
+      }
+      const data = await response.json();
 
-  try {
-       const response = await fetch(API_URL);
-  if (!response.ok) {
-    throw new Error("Erro ao carregar materiais");
-     }
-  const data = await response.json();
+      setMaterials(data);
+    } catch (error) {
+      console.error("Erro ao carregar materiais:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    
+  const baixarMaterial = async (item) => {
+    const quantidadeRetirada = Number(retiradas[item.id] || 0);
 
-    setMaterials(data);
-  } catch (error) {
-    console.error('Erro ao carregar materiais:', error);
-  } finally {
-    setLoading(false);
-  }
-};
+    if (!validarRetirada(item.quantidade, quantidadeRetirada)) {
+      alert("Quantidade inválida para retirada!");
+      return;
+    }
 
-const baixarMaterial = async (item) => {
-  const quantidadeRetirada = Number(retiradas[item.id] || 0);
+    try {
+      await fetch(`${API_URL}/${item.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...item,
+          quantidade: item.quantidade - quantidadeRetirada,
+        }),
+      });
 
-  if (!validarRetirada(item.quantidade, quantidadeRetirada)) {
-    alert('Quantidade inválida para retirada!');
-    return;
-  }
+      carregarMateriais();
 
-  try {
-    await fetch(`${API_URL}/${item.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...item,
-        quantidade: item.quantidade - quantidadeRetirada,
-      }),
-    });
+      setRetiradas({
+        ...retiradas,
+        [item.id]: "",
+      });
+    } catch (error) {
+      console.error("Erro ao baixar estoque:", error);
+    }
+  };
 
-    carregarMateriais();
+  // excluir material
+  const excluirMaterial = async (id) => {
+    console.log("Excluindo:", id);
 
-    setRetiradas({
-      ...retiradas,
-      [item.id]: '',
-    });
-  } catch (error) {
-    console.error('Erro ao baixar estoque:', error);
-  }
-};
+    try {
+      await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
 
- // excluir material
-const excluirMaterial = async (id) => {
-  console.log("Excluindo:", id);
-
-  try {
-    await fetch(`${API_URL}/${id}`, {
-      method: 'DELETE',
-    });
-
-    carregarMateriais();
-  } catch (error) {
-    console.error(error);
-    alert('Erro ao conectar com o servidor.');
-  }
+      carregarMateriais();
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao conectar com o servidor.");
+    }
+  };
 
   // Lista filtro
-  const materiaisFiltrados = materials.filter((item) =>
-  item.nome.toLowerCase().includes(busca.toLowerCase())
-);
-
-};
+    const materiaisFiltrados = materials.filter((item) =>
+      item.nome.toLowerCase().includes(busca.toLowerCase()),
+    );
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Almoxarifado - Enfermagem</Text>
-      
+
       {/* Breve descrição do projeto inserida abaixo */}
       <Text style={styles.description}>
-        Este template servirá para desenvolver o projeto responsável por modernizar o controle de insumos médicos do almoxarifado. 
-        Através desta interface conectada à API, é possível realizar o inventário em tempo real, cadastrar novos materiais e registrar baixas de estoque de forma ágil e segura.
+        Este template servirá para desenvolver o projeto responsável por
+        modernizar o controle de insumos médicos do almoxarifado. Através desta
+        interface conectada à API, é possível realizar o inventário em tempo
+        real, cadastrar novos materiais e registrar baixas de estoque de forma
+        ágil e segura.
       </Text>
-          
-        <TextInput
-          testID="input-nome"
-          placeholder="Nome do Material"
-          value={nome}
-          onChangeText={setNome}
-          style={styles.input} />
 
-        <TextInput
-          testID="input-quantidade"
-          placeholder="Quantidade"
-          value={quantidade}
-          onChangeText={setQuantidade}
-          keyboardType="numeric"
-          style={styles.input}
-        />
-        
+      <TextInput
+        testID="input-nome"
+        placeholder="Nome do Material"
+        value={nome}
+        onChangeText={setNome}
+        style={styles.input}
+      />
+
+      <TextInput
+        testID="input-quantidade"
+        placeholder="Quantidade"
+        value={quantidade}
+        onChangeText={setQuantidade}
+        keyboardType="numeric"
+        style={styles.input}
+      />
+
       <TouchableOpacity
-       testID="btn-cadastrar" 
-       onPress={adicionarOuAtualizarMaterial} 
-       style={styles.button}
+        testID="btn-cadastrar"
+        onPress={adicionarOuAtualizarMaterial}
+        style={styles.button}
       >
-      <Text style={styles.buttonText}>
-       Cadastrar
-      </Text>
-      
+        <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
-        <TextInput
-         testID="input-busca"
-          placeholder="Pesquisar material..."
-          value={busca}
-           onChangeText={setBusca}
-           style={styles.input}
-        />
-        <Text style={styles.subtitle}>
-        <Text testID="total-itens"
-        style={{ marginBottom: 10 }}
-        >
-        Total de materiais: {materiaisFiltrados.length}
-        </Text>
-        Estoque de Materiais
+      <TextInput
+        testID="input-busca"
+        placeholder="Pesquisar material..."
+        value={busca}
+        onChangeText={setBusca}
+        style={styles.input}
+      />
+      <Text style={styles.subtitle}>
+        <Text testID="total-itens" style={{ marginBottom: 10 }}>
+          Total de materiais: {materiaisFiltrados.length}
         </Text>
 
+         {"\n\n"}
+        Estoque de Materiais
+      </Text>
 
       {loading ? (
         <ActivityIndicator size="large" color="#ffffff" />
       ) : (
-      <FlatList
-        testID="lista-materiais"
-        data={materiaisFiltrados}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={[
-                styles.card,
-                item.quantidade < 10 && styles.cardCritico
-                ]}
-                accessibilityLabel={
+        <FlatList
+          testID="lista-materiais"
+          data={materiaisFiltrados}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View
+              style={[styles.card, item.quantidade < 10 && styles.cardCritico]}
+              accessibilityLabel={
                 item.quantidade < 10 ? "estoque-critico" : undefined
-                 }
-          >
-          <Text style={styles.nomeMaterial}>{item.nome}</Text>
-          <Text>Quantidade: {item.quantidade}</Text>
+              }
+            >
+              <Text style={styles.nomeMaterial}>{item.nome}</Text>
+              <Text>Quantidade: {item.quantidade}</Text>
 
-          <TextInput
-           testID="input-retirada"
-           placeholder="Qtd retirada"
-           keyboardType="numeric"
-           value={retiradas[item.id] || ''}
-           onChangeText={(text) =>
-           setRetiradas({...retiradas,
-           [item.id]: text,
-         })
-         }
-          style={styles.inputRetirada}
-          />
+              <TextInput
+                testID="input-retirada"
+                placeholder="Qtd retirada"
+                keyboardType="numeric"
+                value={retiradas[item.id] || ""}
+                onChangeText={(text) =>
+                  setRetiradas({ ...retiradas, [item.id]: text })
+                }
+                style={styles.inputRetirada}
+              />
 
-         <TouchableOpacity
-          testID="btn-baixar"
-          onPress={() => baixarMaterial(item)}
-          style={styles.button}
-          >
-         <Text style={styles.buttonText}>Baixar</Text>
-         </TouchableOpacity>
+              <TouchableOpacity
+                testID="btn-baixar"
+                onPress={() => baixarMaterial(item)}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>Baixar</Text>
+              </TouchableOpacity>
 
-        <TouchableOpacity
-          testID="btn-excluir"
-          onPress={() => excluirMaterial(item.id)}
-          style={styles.btnExcluir}
-       >
-        <Text style={styles.actionText}>Excluir</Text>
-        </TouchableOpacity>
-        </View>
-        )}
-      />
+              <TouchableOpacity
+                testID="btn-excluir"
+                onPress={() => excluirMaterial(item.id)}
+                style={styles.btnExcluir}
+              >
+                <Text style={styles.actionText}>Excluir</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
       )}
     </View>
   );
-
-
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingTop: 50,
     paddingHorizontal: 20,
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 10, // Reduzido ligeiramente para aproximar o texto explicativo
-    color: '#333',
+    color: "#333",
   },
   description: {
     fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
     lineHeight: 20, // Dá um espaçamento confortável entre as linhas do parágrafo
     marginBottom: 30, // Margem inferior para afastar o texto dos futuros inputs dos alunos
   },
 
   input: {
-  backgroundColor: '#fff',
-  padding: 12,
-  borderRadius: 8,
-  marginBottom: 10,
-  borderWidth: 1,
-  borderColor: '#ccc',
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
   },
 
   button: {
-    backgroundColor: '#007BFF',
+    backgroundColor: "#007BFF",
     padding: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
 
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
   },
 
-
- card: {
-  backgroundColor: '#f9f9f9',
-  padding: 15,
-  marginBottom: 10,
-  borderRadius: 8,
-  position: 'relative',
-},
+  card: {
+    backgroundColor: "#f9f9f9",
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 8,
+    position: "relative",
+  },
 
   subtitle: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  marginBottom: 10,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
 
   nomeMaterial: {
-  fontSize: 16,
-  fontWeight: 'bold',
-  marginBottom: 5,
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
   },
 
-btnExcluir: {
-  position: 'absolute',
-  top: 10,
-  right: 10,
-  backgroundColor: '#dc2626',
-  paddingVertical: 6,
-  paddingHorizontal: 12,
-  borderRadius: 6,
+  btnExcluir: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "#dc2626",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
   },
 
   actionText: {
-  color: '#fff',
-  fontWeight: 'bold',
-  fontSize: 14,
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
   },
 
   inputRetirada: {
-  backgroundColor: '#fff',
-  borderWidth: 1,
-  borderColor: '#ccc',
-  borderRadius: 8,
-  padding: 10,
-  marginTop: 10,
-  marginBottom: 10,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 10,
+    marginBottom: 10,
   },
   cardCritico: {
-  backgroundColor: '#ffe5e5',
-  borderWidth: 2,
-  borderColor: '#ff0000',
- },
-
-}); 
+    backgroundColor: "#ffe5e5",
+    borderWidth: 2,
+    borderColor: "#ff0000",
+  },
+});
