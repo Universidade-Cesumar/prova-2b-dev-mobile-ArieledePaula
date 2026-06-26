@@ -58,8 +58,9 @@ export default function App() {
       setQuantidade("");
       carregarMateriais();
     } catch (error) {
-      console.error("Erro ao adicionar material:", error);
-    }
+      console.error("Erro ao carregar materiais:", error);
+      alert("Não foi possível carregar os materiais. Verifique sua conexão.");
+      }
   };
 
   const carregarMateriais = async () => {
@@ -75,6 +76,8 @@ export default function App() {
       setMaterials(data);
     } catch (error) {
       console.error("Erro ao carregar materiais:", error);
+      alert("Não foi possível carregar os materiais. Verifique sua conexão.");
+
     } finally {
       setLoading(false);
     }
@@ -107,8 +110,9 @@ export default function App() {
         [item.id]: "",
       });
     } catch (error) {
-      console.error("Erro ao baixar estoque:", error);
-    }
+     console.error("Erro ao carregar materiais:", error);
+     alert("Não foi possível carregar os materiais. Verifique sua conexão.");
+     }
   };
 
   // excluir material
@@ -123,7 +127,7 @@ export default function App() {
       carregarMateriais();
     } catch (error) {
       console.error(error);
-      alert("Erro ao conectar com o servidor.");
+      alert("Não foi possível carregar os materiais. Verifique sua conexão.");
     }
   };
 
